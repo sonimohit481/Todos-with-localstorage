@@ -16,27 +16,13 @@ export const TodoContext = createContext<TodoContextProps | undefined>(
   undefined
 );
 
-export const useTodo = () => {
-  const context = useContext(TodoContext);
-  if (!context) {
-    throw new Error("useTodo must be used within a TodoProvider");
-  }
-  return context;
-};
-
 export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [todos, setTodos] = useState<TodoProps[]>([
-    {
-      id: 1,
-      todo: "Todos message",
-      completed: false,
-    },
-  ]);
+  const [todos, setTodos] = useState<TodoProps[]>([]);
 
   const addTodo = (todo: TodoProps) => {
-    setTodos((prev) => [{ ...todo, id: Date.now() }, ...prev]);
+    setTodos((prev) => [{ ...todo }, ...prev]);
   };
 
   const updateTodo = (id: number, updatedTodo: TodoProps) => {
@@ -82,4 +68,12 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
       {children}
     </TodoContext.Provider>
   );
+};
+
+export const useTodo = () => {
+  const context = useContext(TodoContext);
+  if (!context) {
+    throw new Error("useTodo must be used within a TodoProvider");
+  }
+  return context;
 };
