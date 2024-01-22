@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 export interface TodoProps {
   id: number;
   todo: string;
@@ -58,6 +58,22 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
       )
     );
   };
+
+  useEffect(() => {
+    const storedTodos = localStorage.getItem("todos");
+
+    if (storedTodos) {
+      const todos = JSON.parse(storedTodos);
+
+      if (Array.isArray(todos) && todos.length > 0) {
+        setTodos(todos);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos]);
 
   return (
     <TodoContext.Provider
